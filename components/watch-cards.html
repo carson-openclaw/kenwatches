@@ -1,0 +1,117 @@
+<!-- components/watch-card.html -->
+<style>
+  .watch-card {
+    flex: 0 0 280px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #222;
+    transition: all 0.25s;
+    scroll-snap-align: start;
+  }
+
+  .watch-card:hover {
+    transform: translateY(-12px);
+    border-color: #555;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+
+  .watch-image-container {
+    height: 260px;
+    padding: 20px 12px;
+    overflow: hidden;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #222;
+  }
+
+  .watch-img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transition: transform 0.35s ease;
+  }
+
+  .watch-card:hover .watch-img {
+    transform: scale(1.04);
+  }
+
+  .watch-info {
+    padding: 1.1rem 1rem;
+    text-align: center;
+  }
+
+  .watch-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.3rem;
+    color: #f0f0f0;
+  }
+
+  .watch-reference {
+    font-size: 0.95rem;
+    color: #999;
+    margin: 0.3rem 0 0.7rem;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .price {
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: #c49a6c;
+    margin: 0.3rem 0;
+  }
+
+  .condition {
+    font-size: 0.9rem;
+    color: #aaa;
+    background: #222;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  /* Optional: subtle improvements for better readability & consistency */
+  .condition.new {
+    background: #2e7d32;
+    color: white;
+  }
+
+  .condition.used {
+    background: #e65100;
+    color: white;
+  }
+
+  /* Very small mobile adjustment (if cards become too small) */
+  @media (max-width: 400px) {
+    .watch-card {
+      flex: 0 0 240px;
+    }
+    .watch-image-container {
+      height: 220px;
+      padding: 15px 10px;
+    }
+    .watch-info h3 {
+      font-size: 1.15rem;
+    }
+    .price {
+      font-size: 1.3rem;
+    }
+  }
+</style>
+
+<div class="watch-card">
+  <div class="watch-image-container">
+    <img src="IMAGESRC" alt="ALT_TEXT" class="watch-img">
+  </div>
+  <div class="watch-info">
+    <h3>MODEL_NAME</h3>
+    <div class="watch-reference">REFERENCE_NUMBER</div>
+    <p class="price">PRICE</p>
+    <span class="condition">CONDITION</span>
+  </div>
+</div>

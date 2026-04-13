@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title data-i18n="title">Luxury Watches - Home</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f0f;
+      color: #f0f0f0;
+      overflow-x: hidden;
+    }
+
+    /* ─── Hero Section ─── */
+    .hero {
+      height: 100vh;
+      min-height: 720px;
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.58);
+      z-index: 1;
+    }
+    .hero-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: grid;
+      grid-template-columns: 40% 60%;
+      gap: 3.5rem;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Left */
+    .hero-left {
+      padding-top: 3rem;
+      color: white;
+    }
+    .hero-left h1 {
+      font-size: 4rem;
+      margin-bottom: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+    }
+    .hero-left p {
+      font-size: 1.35rem;
+      color: #e0e0e0;
+      margin-bottom: 2.8rem;
+      line-height: 1.5;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary, .btn-secondary {
+      display: inline-block;
+      padding: 1rem 2.2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .btn-primary {
+      background: #c49a6c;
+      color: black;
+    }
+    .btn-primary:hover {
+      background: #d4aa7c;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid #777;
+      color: #ddd;
+    }
+    .btn-secondary:hover {
+      border-color: #aaa;
+      color: white;
+    }
+
+    /* Right - Horizontal Scroller */
+    .hero-right {
+      padding: 1rem 0;
+      min-width: 0;
+    }
+    .watch-scroller {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding: 1rem 1rem 1.5rem 2rem;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      scrollbar-color: #555 #222;
+      -webkit-overflow-scrolling: touch;
+    }
+    .watch-scroller > :first-child {
+      scroll-snap-align: start;
+      margin-left: 0;
+    }
+    .watch-scroller::-webkit-scrollbar {
+      height: 8px;
+    }
+    .watch-scroller::-webkit-scrollbar-track {
+      background: #222;
+    }
+    .watch-scroller::-webkit-scrollbar-thumb {
+      background: #555;
+      border-radius: 4px;
+    }
+
+    /* ─── Watch Card ─── */
+    .watch-card {
+      flex: 0 0 280px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #222;
+      transition: all 0.25s;
+      scroll-snap-align: start;
+    }
+    .watch-card:hover {
+      transform: translateY(-12px);
+      border-color: #555;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .watch-image-container {
+      height: 260px;
+      padding: 20px 12px;
+      overflow: hidden;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #222;
+      position: relative;
+    }
+    .watch-img {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
+      object-position: center;
+      transition: transform 0.35s ease;
+    }
+    .watch-card:hover .watch-img {
+      transform: scale(1.04);
+    }
+
+    /* Bookmark heart icon */
+    .bookmark-heart {
+      position: absolute; top: 12px; right: 12px;
+      background: rgba(0,0,0,0.5); border-radius: 50%;
+      width: 36px; height: 36px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: #ccc; transition: all 0.2s; z-index: 10;
+    }
+    .bookmark-heart:hover { background: rgba(0,0,0,0.7); transform: scale(1.15); color: #ff4757; }
+    .bookmark-heart i.fas { color: #ff4757; }
+
+    .watch-info {
+      padding: 1.1rem 1rem;
+      text-align: center;
+    }
+    .watch-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.3rem;
+    }
+    .watch-reference {
+      font-size: 0.95rem;
+      color: #999;
+      margin: 0.3rem 0 0.7rem;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .price {
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: #c49a6c;
+      margin: 0.3rem 0;
+    }
+    .condition {
+      font-size: 0.9rem;
+      color: #aaa;
+      background: #222;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+    }
+
+    /* ─── Brands Section ─── */
+    .brands-section {
+      padding: 5rem 0;
+      background: #0a0a0a;
+      text-align: center;
+    }
+    .section-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .brands-section h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+    .brands-section p {
+      font-size: 1.3rem;
+      color: #bbb;
+      margin-bottom: 2.5rem;
+    }
+    .brand-search {
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+    .brand-search-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 50px;
+      color: white;
+      font-size: 1.1rem;
+    }
+    .brand-search-input::placeholder {
+      color: #777;
+    }
+    .brand-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    .brand-btn {
+      display: block;
+      padding: 1.2rem 1.5rem;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 10px;
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .brand-btn:hover {
+      background: #c49a6c;
+      color: #000;
+      border-color: #c49a6c;
+      transform: translateY(-3px);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1100px) {
+      .hero {
+        height: auto;
+        min-height: auto;
+        padding: 8rem 0 4rem;
+      }
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-left {
+        padding: 1rem 1.5rem 2rem;
+      }
+      .hero-left h1 {
+        font-size: 3.2rem;
+      }
+      .hero-right {
+        margin-top: 1rem;
+        padding: 1rem 0;
+      }
+      .hero-buttons {
+        justify-content: center;
+      }
+      .watch-scroller {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: 6rem 0 2rem;
+      }
+      .hero-container {
+        padding: 0 1.2rem;
+        gap: 1.5rem;
+      }
+      .hero-right {
+        padding: 0.5rem 0;
+        overflow: visible;
+      }
+      .watch-scroller {
+        padding: 0.5rem 0.5rem;
+        gap: 1rem;
+      }
+      .hero-left h1 {
+        font-size: 2.4rem;
+        letter-spacing: -0.5px;
+      }
+      .hero-left p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+      }
+      .btn-primary, .btn-secondary {
+        padding: 0.85rem 1.6rem;
+        font-size: 1rem;
+      }
+      .watch-card {
+        flex: 0 0 220px;
+      }
+      .watch-image-container {
+        height: 200px;
+      }
+      .watch-info h3 {
+        font-size: 1.1rem;
+      }
+      .price {
+        font-size: 1.2rem;
+      }
+      .brand-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 0.8rem;
+      }
+      .brand-btn {
+        padding: 0.9rem 1rem;
+        font-size: 0.95rem;
+      }
+      .brands-section {
+        padding: 3rem 0;
+      }
+      .brands-section h2 {
+        font-size: 2rem;
+      }
+      .brands-section p {
+        font-size: 1.1rem;
+      }
+      .brand-search-input {
+        padding: 0.85rem 1.2rem;
+        font-size: 1rem;
+      }
+      .section-container {
+        padding: 0 1rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hero-left h1 { font-size: 1.8rem; }
+      .hero-left p { font-size: 0.95rem; }
+      .hero-buttons { flex-direction: column; align-items: center; gap: 0.8rem; }
+      .brand-grid { grid-template-columns: repeat(2, 1fr); }
+      .watch-card { flex: 0 0 180px; }
+      .watch-image-container { height: 170px; }
+    }
+
+    /* ─── About / History Section ─── */
+    .about-section {
+      padding: 5rem 0;
+      background: #0f0f0f;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-content h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1.5rem;
+      color: #c49a6c;
+      font-weight: 600;
+    }
+    .about-content p {
+      font-size: 1.1rem;
+      color: #bbb;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+      background: #1a1a1a;
+      border-radius: 12px;
+      border: 1px solid #222;
+    }
+    .stat-number {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #c49a6c;
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.95rem;
+      color: #888;
+      margin-top: 0.3rem;
+    }
+    .about-stores {
+      margin-top: 2.5rem;
+    }
+    .about-stores h3 {
+      font-size: 1.4rem;
+      color: #c49a6c;
+      margin-bottom: 1rem;
+    }
+    .store-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid #222;
+    }
+    .store-item:last-child { border-bottom: none; }
+    .store-name {
+      font-weight: 600;
+      color: #f0f0f0;
+      font-size: 1.05rem;
+    }
+    .store-detail {
+      color: #888;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-content h2 { font-size: 2.2rem; }
+    }
+    @media (max-width: 600px) {
+      .about-section { padding: 3rem 0; }
+      .about-content h2 { font-size: 1.8rem; }
+      .about-stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .stat-number { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation will be inserted here -->
+  <div id="navbar-container"></div>
+
+  <main>
+    <section class="hero" style="background-image: url('images/home-bg.jpg');">
+      <div class="hero-container">
+        <!-- Left side - Text + buttons -->
+        <div class="hero-left">
+          <h1 data-i18n="hero.title">New Arrivals</h1>
+          <p data-i18n="hero.subtitle">Our latest models from Rolex, Omega, TAG Heuer and more.</p>
+          <div class="hero-buttons">
+            <a href="shop.html" class="btn-primary" data-i18n="hero.shopNow">Shop Now</a>
+            <a href="sell.html" class="btn-secondary" data-i18n="hero.sell">I want to sell my watch</a>
+          </div>
+        </div>
+
+        <!-- Right side - Horizontal scrolling watches -->
+        <div class="hero-right">
+          <div class="watch-scroller">
+            <!-- Filled dynamically by functions.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shop by Brand section -->
+    <section class="brands-section">
+      <div class="section-container">
+        <h2 data-i18n="brands.title">Shop by Brand</h2>
+        <p data-i18n="brands.subtitle">Explore our curated selection from the world's finest watchmakers.</p>
+        <div class="brand-search">
+          <input
+            type="text"
+            id="brandSearch"
+            placeholder="Search brands..."
+            class="brand-search-input"
+            data-i18n-placeholder="brands.searchPlaceholder"
+          >
+        </div>
+        <div class="brand-grid" id="brandGrid">
+          <a href="shop.html?brand=rolex" class="brand-btn">Rolex</a>
+          <a href="shop.html?brand=omega" class="brand-btn">Omega</a>
+          <a href="shop.html?brand=tag-heuer" class="brand-btn">TAG Heuer</a>
+          <a href="shop.html?brand=patek-philippe" class="brand-btn">Patek Philippe</a>
+          <a href="shop.html?brand=audemars-piguet" class="brand-btn">Audemars Piguet</a>
+          <a href="shop.html?brand=cartier" class="brand-btn">Cartier</a>
+          <a href="shop.html?brand=breitling" class="brand-btn">Breitling</a>
+          <a href="shop.html?brand=tudor" class="brand-btn">Tudor</a>
+          <a href="shop.html?brand=vacheron-constantin" class="brand-btn">Vacheron Constantin</a>
+          <a href="shop.html?brand=jaeger-lecoultre" class="brand-btn">Jaeger-LeCoultre</a>
+          <a href="shop.html?brand=panerai" class="brand-btn">Panerai</a>
+          <a href="shop.html?brand=iwc" class="brand-btn">IWC</a>
+          <a href="shop.html?brand=longines" class="brand-btn">Longines</a>
+          <a href="shop.html?brand=blancpain" class="brand-btn">Blancpain</a>
+          <a href="shop.html?brand=hublot" class="brand-btn">Hublot</a>
+          <a href="shop.html?brand=zenith" class="brand-btn">Zenith</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Ken's Watches -->
+    <section class="about-section">
+      <div class="section-container">
+        <div class="about-grid">
+          <div class="about-content">
+            <h2>Our Story</h2>
+            <p>Ken's Watches (名錶廊) was first set up in 2002 with our first little store in Wan Chai. We buy, we sell, and we trade watches — and we would love to share with you the fun of collecting.</p>
+            <p>For over 20 years, we've grown to 4 branches at prime locations across Hong Kong. Whether you're looking for a fashionable or collectable classic timepiece, Ken's Watches is always the place to go.</p>
+            <p>We offer the best possible price for trade-ins and a 6-month comprehensive warranty on every purchase. Our staff have profound knowledge to provide credible, professional advice.</p>
+            <div class="about-stats">
+              <div class="stat-item">
+                <span class="stat-number">20+</span>
+                <span class="stat-label">Years in Business</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">4</span>
+                <span class="stat-label">Stores in HK</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">1000+</span>
+                <span class="stat-label">Watches Available</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Brands Carried</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-stores">
+            <h3>Visit Us</h3>
+            <div class="store-item">
+              <div class="store-name">Wan Chai Store</div>
+              <div class="store-detail">Shop B5-B7, G/F, 88 Lockhart Road · Mon-Sat 12:00-20:00 · +852 6999 9996</div>
+            </div>
+            <div class="store-item">
+              <div class="store-name">Central Store</div>
+              <div class="store-detail">Shop B, G/F, 84-86 Des Voeux Road · Mon-Sat 11:30-19:30 · +852 679 22222</div>
+            </div>
+            <div class="store-item">
+              <div class="store-name">Causeway Bay Store</div>
+              <div class="store-detail">Shop 26, G/F, 64 Lee Garden Road · Mon-Sat 12:00-20:00 · +852 6999 9992</div>
+            </div>
+            <div class="store-item">
+              <div class="store-name">Tsim Sha Tsui Store</div>
+              <div class="store-detail">Shop G22, G/F, Peninsula Centre, 67 Mody Road · +852 6999 9993</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Language loading & switching logic -->
+  <script src="i18n.js"></script>
+  <script>
+    // Load navigation
+    fetch('nav.html')
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to load navigation');
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+
+        const currentPage = location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-links a').forEach(link => {
+          if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+          }
+        });
+
+        // Initialize i18n + auth after nav loads
+        initI18n();
+        if (typeof initAuth === 'function') initAuth();
+      })
+      .catch(error => {
+        console.error('Error loading navbar:', error);
+        document.getElementById('navbar-container').innerHTML =
+          '<nav style="background:#111; padding:1rem; text-align:center; color:#fff;">' +
+          'Navigation failed to load – <a href="index.html" style="color:#c49a6c;">Home</a> | ' +
+          '<a href="shop.html" style="color:#c49a6c;">Shop</a> | ' +
+          '<a href="sell.html" style="color:#c49a6c;">Sell</a> | ' +
+          '<a href="media.html" style="color:#c49a6c;">Media</a>' +
+          '</nav>';
+      });
+
+    // Brand search filter
+    const searchInput = document.getElementById('brandSearch');
+    const brandGrid = document.getElementById('brandGrid');
+    if (searchInput && brandGrid) {
+      searchInput.addEventListener('input', (e) => {
+        const filter = e.target.value.toLowerCase().trim();
+        const brands = brandGrid.getElementsByClassName('brand-btn');
+        Array.from(brands).forEach(btn => {
+          const text = btn.textContent.toLowerCase();
+          btn.style.display = text.includes(filter) ? '' : 'none';
+        });
+
+        const visible = Array.from(brands).filter(b => b.style.display !== 'none');
+        let msg = document.getElementById('noResults');
+
+        if (visible.length === 0 && filter !== '') {
+          if (!msg) {
+            msg = document.createElement('p');
+            msg.id = 'noResults';
+            msg.textContent = translations[currentLang]?.['brands.noResults'] || 'No brands found.';
+            msg.style.textAlign = 'center';
+            msg.style.color = '#aaa';
+            msg.style.marginTop = '2rem';
+            brandGrid.parentNode.insertBefore(msg, brandGrid.nextSibling);
+          }
+        } else if (msg) {
+          msg.remove();
+        }
+      });
+    }
+  </script>
+
+  <script src="auth.js"></script>
+  <script src="mobile.js"></script>
+  <script src="functions.js"></script>
+</body>
+</html>

@@ -1,0 +1,642 @@
+<nav class="navbar">
+  <style>
+    /* Reset & base (minimal, only what's needed for nav) */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(15, 15, 15, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #222;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo */
+    .logo {
+      display: block;
+      line-height: 0;
+    }
+    .logo img {
+      height: 42px;
+      width: auto;
+      transition: opacity 0.3s ease;
+    }
+    .logo-light {
+      opacity: 1;
+    }
+    .logo-dark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    /* Nav Links */
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.2rem;
+      margin: 0;
+    }
+    .nav-links li {
+      display: block;
+    }
+    .nav-links a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: white;
+    }
+
+    /* Right side */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* Language Selector */
+    .language-selector {
+      position: relative;
+      display: inline-block;
+    }
+    .language-select {
+      appearance: none;
+      background: none;
+      border: none;
+      padding: 0.4rem 1.4rem 0.4rem 0;
+      color: #ddd;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23aaa' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.2rem center;
+      background-size: 10px;
+    }
+    .language-select::-ms-expand {
+      display: none;
+    }
+    .language-select:hover,
+    .language-select:focus {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      outline: none;
+    }
+
+    /* Auth Buttons */
+    .auth-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .btn-login,
+    .btn-signup {
+      color: #ddd;
+      text-decoration: none;
+      padding: 0.5rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .btn-login:hover {
+      background: #333;
+      color: white;
+    }
+    .btn-signup {
+      background: #c49a6c;
+      color: #000;
+    }
+    .btn-signup:hover {
+      background: #d4aa7c;
+      color: #000;
+    }
+
+    /* Hamburger menu button (hidden on desktop) */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #ddd;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Mobile menu overlay */
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 999;
+    }
+    .mobile-overlay.active { display: block; }
+
+    /* Mobile drawer */
+    .mobile-drawer {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 320px;
+      height: 100vh;
+      background: #111;
+      z-index: 1000;
+      padding: 5rem 2rem 2rem;
+      transition: right 0.3s ease;
+      overflow-y: auto;
+      border-left: 1px solid #222;
+    }
+    .mobile-drawer.active { right: 0; display: block; }
+    .mobile-drawer .mobile-nav-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .mobile-drawer .mobile-nav-links li {
+      border-bottom: 1px solid #222;
+    }
+    .mobile-drawer .mobile-nav-links a {
+      display: block;
+      padding: 1.1rem 0;
+      color: #ddd;
+      text-decoration: none;
+      font-size: 1.15rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .mobile-drawer .mobile-nav-links a:hover,
+    .mobile-drawer .mobile-nav-links a.active {
+      color: #c49a6c;
+    }
+    .mobile-drawer .mobile-nav-links a i {
+      width: 28px;
+      margin-right: 0.8rem;
+      color: #888;
+    }
+    .mobile-drawer .mobile-footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #222;
+    }
+    .mobile-drawer .mobile-lang {
+      margin-bottom: 1rem;
+    }
+    .mobile-drawer .mobile-lang select {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #ddd;
+      font-size: 1rem;
+      appearance: none;
+      cursor: pointer;
+    }
+    .mobile-drawer .mobile-auth {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .mobile-drawer .mobile-auth .btn-login,
+    .mobile-drawer .mobile-auth .btn-signup {
+      display: block;
+      text-align: center;
+      padding: 0.9rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .mobile-drawer .mobile-auth .btn-login {
+      background: #222;
+      color: #ddd;
+      border: 1px solid #333;
+    }
+    .mobile-drawer .mobile-auth .btn-signup {
+      background: #c49a6c;
+      color: #000;
+    }
+
+    /* Responsive: mobile breakpoint */
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 1.2rem;
+        height: 64px;
+      }
+      .logo img { height: 34px; }
+      .nav-links { display: none; }
+      .nav-right .language-selector { display: none; }
+      .nav-right .auth-buttons { display: none; }
+      .hamburger { display: flex; }
+      .auth-modal-content { padding: 1.5rem; margin: 0.5rem; }
+    }
+
+    /* Responsive: small phones */
+    @media (max-width: 380px) {
+      .nav-container { padding: 0 0.8rem; }
+      .logo img { height: 30px; }
+    }
+
+    /* Light theme overrides (applied when .shop-theme exists on body) */
+    body.shop-theme .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid #e0e0e0;
+      backdrop-filter: blur(10px);
+    }
+    body.shop-theme .nav-links a,
+    body.shop-theme .btn-login {
+      color: #111;
+    }
+    body.shop-theme .nav-links a:hover,
+    body.shop-theme .nav-links a.active,
+    body.shop-theme .btn-login:hover {
+      color: #c49a6c;
+    }
+    body.shop-theme .btn-signup {
+      background: #c49a6c;
+      color: #000;
+    }
+    body.shop-theme .btn-signup:hover {
+      background: #d4aa7c;
+    }
+    body.shop-theme .logo-light {
+      opacity: 0;
+    }
+    body.shop-theme .logo-dark {
+      opacity: 1;
+    }
+    body.shop-theme .language-select {
+      color: #111;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23555' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
+    }
+    body.shop-theme .language-select:hover,
+    body.shop-theme .language-select:focus {
+      color: #c49a6c;
+    }
+    body.shop-theme .hamburger span { background: #111; }
+    body.shop-theme .mobile-drawer { background: #fff; border-left-color: #e0e0e0; }
+    body.shop-theme .mobile-drawer .mobile-nav-links li { border-bottom-color: #eee; }
+    body.shop-theme .mobile-drawer .mobile-nav-links a { color: #111; }
+    body.shop-theme .mobile-drawer .mobile-nav-links a:hover,
+    body.shop-theme .mobile-drawer .mobile-nav-links a.active { color: #c49a6c; }
+    body.shop-theme .mobile-drawer .mobile-nav-links a i { color: #888; }
+    body.shop-theme .mobile-drawer .mobile-footer { border-top-color: #eee; }
+    body.shop-theme .mobile-drawer .mobile-lang select { background: #f5f5f5; border-color: #ddd; color: #111; }
+    body.shop-theme .mobile-drawer .mobile-auth .btn-login { background: #f5f5f5; color: #111; border-color: #ddd; }
+  </style>
+
+  <div class="nav-container">
+
+    <a href="index.html" class="logo">
+      <img src="images/logo-white.png" alt="Luxury Watches Logo" class="logo-light">
+      <img src="images/logo-black.png" alt="Luxury Watches Logo" class="logo-dark">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+      <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
+      <li><a href="sell.html" data-i18n="nav.sell">Sell</a></li>
+      <li><a href="media.html" data-i18n="nav.media">Media</a></li>
+      <li><a href="#" onclick="handleNavBookmarks(event)" data-i18n="nav.bookmarks">Bookmarks</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <!-- Language selector -->
+      <div class="language-selector">
+        <select id="languageSelect" class="language-select">
+          <option value="en">EN</option>
+          <option value="zh-TW">繁</option>
+          <option value="zh-CN">简</option>
+        </select>
+      </div>
+
+      <div class="auth-buttons" id="auth-buttons-container">
+        <!-- Logged out state -->
+        <div id="authButtonsOut" style="display:flex; gap:0.75rem;">
+          <a href="#" class="btn-login" onclick="showLoginModal(); return false;" data-i18n="nav.login">Login</a>
+          <a href="#" class="btn-signup" onclick="showRegisterModal(); return false;" data-i18n="nav.signup">Sign Up</a>
+        </div>
+        <!-- Logged in state -->
+        <div id="authButtonsIn" style="display:none; gap:0.75rem; align-items:center;">
+          <span id="userName" style="color:#ddd; font-weight:500;"></span>
+          
+          <button class="btn-login" onclick="logout()" style="background:none; border:none; cursor:pointer; font-size:inherit;" data-i18n="nav.logout">Logout</button>
+        </div>
+      </div>
+
+      <!-- Hamburger (mobile only) -->
+      <button class="hamburger" id="hamburgerBtn" aria-label="Menu" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Mobile drawer + overlay -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeMobileMenu()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <ul class="mobile-nav-links">
+      <li><a href="index.html"><i class="fas fa-home"></i> <span data-i18n="nav.home">Home</span></a></li>
+      <li><a href="shop.html"><i class="fas fa-store"></i> <span data-i18n="nav.shop">Shop</span></a></li>
+      <li><a href="sell.html"><i class="fas fa-tag"></i> <span data-i18n="nav.sell">Sell</span></a></li>
+      <li><a href="media.html"><i class="fas fa-photo-film"></i> <span data-i18n="nav.media">Media</span></a></li>
+      <li><a href="#" onclick="handleNavBookmarks(event)"><i class="fas fa-heart"></i> <span data-i18n="nav.bookmarks">Bookmarks</span></a></li>
+    </ul>
+    <div class="mobile-footer">
+      <div class="mobile-lang">
+        <select id="mobileLanguageSelect" onchange="handleMobileLangChange(this.value)">
+          <option value="en">English</option>
+          <option value="zh-TW">繁體中文</option>
+          <option value="zh-CN">简体中文</option>
+        </select>
+      </div>
+      <div class="mobile-auth" id="mobileAuthButtons">
+        <div id="mobileAuthOut" style="display:flex;flex-direction:column;gap:0.8rem;">
+          <a href="#" class="btn-login" onclick="showLoginModal();closeMobileMenu();return false;" data-i18n="nav.login">Login</a>
+          <a href="#" class="btn-signup" onclick="showRegisterModal();closeMobileMenu();return false;" data-i18n="nav.signup">Sign Up</a>
+        </div>
+        <div id="mobileAuthIn" style="display:none;flex-direction:column;gap:0.8rem;">
+          <span id="mobileUserName" style="color:#c49a6c;font-weight:600;text-align:center;display:block;padding:0.5rem 0;"></span>
+          <a href="#" class="btn-login" onclick="logout();closeMobileMenu();return false;" data-i18n="nav.logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal (Tabbed: Login / Register, with Email / Phone sub-tabs) -->
+  <div id="authModal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-overlay" onclick="hideAuthModal()"></div>
+    <div class="auth-modal-content">
+      <button class="auth-modal-close" onclick="hideAuthModal()">&times;</button>
+
+      <!-- Main Tabs: Login / Register -->
+      <div class="auth-main-tabs">
+        <button class="auth-main-tab active" onclick="switchMainTab('login')">Login</button>
+        <button class="auth-main-tab" onclick="switchMainTab('register')">Sign Up</button>
+      </div>
+
+      <!-- Sub Tabs: Email / Phone -->
+      <div class="auth-sub-tabs">
+        <button class="auth-sub-tab active" onclick="switchSubTab('email')" id="subTabEmail">Email</button>
+        <button class="auth-sub-tab" onclick="switchSubTab('phone')" id="subTabPhone">Phone</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <div class="form-group auth-field-email">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group auth-field-phone" style="display:none;">
+          <label>Phone Number</label>
+          <input type="tel" id="loginPhone" placeholder="+852 1234 5678">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" required>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn-primary">Login</button>
+        </div>
+        <div id="loginMessage" class="auth-message"></div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form" style="display:none;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="registerName" required placeholder="Your name">
+        </div>
+        <div class="form-group auth-field-email">
+          <label>Email</label>
+          <input type="email" id="registerEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group auth-field-phone" style="display:none;">
+          <label>Phone Number *</label>
+          <input type="tel" id="registerPhone" placeholder="+852 1234 5678">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="registerPassword" required placeholder="Min 6 characters">
+        </div>
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" required>
+        </div>
+        <div class="form-group">
+          <label>Verification Code</label>
+          <input type="text" id="registerVerifyCode" placeholder="Enter code (optional for now)">
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn-primary">Create Account</button>
+        </div>
+        <div id="registerMessage" class="auth-message"></div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .auth-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+    .auth-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+    }
+    .auth-modal-content {
+      position: relative;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+      color: #f0f0f0;
+      z-index: 10000;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    }
+    .auth-modal-content h2 {
+      color: #c49a6c;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .auth-modal-content .form-group {
+      margin-bottom: 1rem;
+    }
+    .auth-modal-content label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .auth-modal-content input {
+      width: 100%;
+      padding: 0.75rem;
+      background: #222;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+    }
+    .auth-modal-content input:focus {
+      outline: none;
+      border-color: #c49a6c;
+    }
+    .auth-modal-content .btn-primary {
+      width: 100%;
+      padding: 0.9rem;
+      background: #c49a6c;
+      color: black;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .auth-modal-content .btn-primary:hover {
+      background: #d4aa7c;
+    }
+    .auth-modal-content .auth-switch {
+      text-align: center;
+      margin-top: 1rem;
+      color: #aaa;
+    }
+    .auth-modal-content .auth-switch a {
+      color: #c49a6c;
+      cursor: pointer;
+    }
+    .auth-modal-content .auth-message {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .auth-modal-content .auth-message.success {
+      background: rgba(46, 125, 50, 0.2);
+      color: #81c784;
+    }
+    .auth-modal-content .auth-message.error {
+      background: rgba(198, 40, 40, 0.2);
+      color: #ff8a80;
+    }
+
+    /* Auth Tabs */
+    .auth-main-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.2rem;
+      border-bottom: 2px solid #333;
+    }
+    .auth-main-tab {
+      flex: 1;
+      padding: 0.8rem;
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .auth-main-tab.active { color: #c49a6c; border-bottom-color: #c49a6c; }
+    .auth-main-tab:hover { color: #ddd; }
+    .auth-sub-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.2rem; }
+    .auth-sub-tab {
+      flex: 1; padding: 0.5rem; background: #222; border: 1px solid #444;
+      border-radius: 6px; color: #888; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .auth-sub-tab.active { background: #c49a6c; color: #000; border-color: #c49a6c; }
+    .auth-sub-tab:hover:not(.active) { border-color: #666; color: #ccc; }
+    .auth-modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .auth-modal-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .auth-modal-buttons button {
+      flex: 1;
+      padding: 0.9rem;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .auth-modal-buttons .btn-secondary {
+      background: #333;
+      color: #ddd;
+    }
+    .auth-modal-buttons .btn-secondary:hover {
+      background: #444;
+    }
+  </style>
+
+</nav>

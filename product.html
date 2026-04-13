@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Watch Details - KenWatches</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+     body { overflow-x: hidden; font-family: 'Segoe UI', system-ui, sans-serif; background: #ffffff; color: #111; }
+    .section-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
+    .product-page { padding: 7rem 0 4rem; }
+    .back-link { color: #c49a6c; text-decoration: none; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; }
+    .back-link:hover { color: #b08a5c; }
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .product-name { font-size: 2rem; }
+      .product-price { font-size: 1.6rem; }
+      .section-container { padding: 0 1.2rem; }
+    }
+    @media (max-width: 600px) {
+      .product-page { padding: 6rem 0 3rem; }
+      .product-image { padding: 2rem 1rem; min-height: 300px; }
+      .product-image img { max-height: 300px; }
+      .product-name { font-size: 1.6rem; }
+      .product-reference { font-size: 1rem; }
+      .product-price { font-size: 1.4rem; }
+      .product-specs h3 { font-size: 1.1rem; }
+      .spec-row { padding: 0.6rem 0; font-size: 0.95rem; }
+      .product-actions { flex-direction: column; }
+      .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 0.9rem 1.5rem; }
+    }
+    @media (max-width: 380px) {
+      .product-image { min-height: 250px; padding: 1.5rem 0.8rem; }
+      .product-name { font-size: 1.4rem; }
+      .product-price { font-size: 1.3rem; }
+    }
+    .product-image { background: #f9f9f9; border-radius: 16px; padding: 3rem; display: flex; align-items: center; justify-content: center; min-height: 400px; border: 1px solid #e0e0e0; position: relative; }
+    .product-image img { max-width: 100%; max-height: 450px; object-fit: contain; }
+    .bookmark-btn-lg { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.9); border: 1px solid #e0e0e0; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: #999; transition: all 0.2s; }
+    .bookmark-btn-lg:hover { background: #fff; color: #ff4757; transform: scale(1.1); border-color: #ff4757; }
+    .bookmark-btn-lg.bookmarked { color: #ff4757; }
+    .product-details { padding-top: 1rem; }
+    .product-brand { color: #c49a6c; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
+    .product-name { font-size: 2.4rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.2; color: #111; }
+    .product-reference { font-family: 'Courier New', monospace; color: #666; font-size: 1.1rem; margin-bottom: 1.5rem; }
+    .product-price { font-size: 2rem; font-weight: 700; color: #c49a6c; margin-bottom: 1.5rem; }
+    .product-condition { display: inline-block; padding: 0.4rem 1.2rem; border-radius: 20px; font-size: 0.95rem; margin-bottom: 2rem; }
+    .product-condition.new { background: #e6f4ea; color: #2e7d32; }
+    .product-condition.used { background: #fff3e0; color: #e65100; }
+    .product-specs { margin-bottom: 2rem; }
+    .product-specs h3 { font-size: 1.2rem; margin-bottom: 1rem; color: #333; }
+    .spec-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #e0e0e0; }
+    .spec-label { color: #666; }
+    .spec-value { color: #111; font-weight: 500; }
+    .product-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .btn-primary { display: inline-block; padding: 1rem 2.2rem; background: #c49a6c; color: black; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.25s; }
+    .btn-primary:hover { background: #d4aa7c; transform: translateY(-2px); }
+    .btn-secondary { display: inline-block; padding: 1rem 2.2rem; background: transparent; border: 2px solid #555; color: #ddd; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.25s; }
+    .btn-secondary:hover { border-color: #aaa; color: white; }
+    .product-not-found { text-align: center; padding: 8rem 2rem; }
+    .product-not-found h2 { font-size: 2rem; margin-bottom: 1rem; color: #666; }
+
+    /* Auth modal handled by auth.js */
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="product-page">
+    <div class="section-container">
+      <a href="shop.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+      <div id="productContent">
+        <p style="text-align:center; padding: 4rem; color: #666;">Loading watch details...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="i18n.js"></script>
+  <script src="auth.js"></script>
+  <script src="mobile.js"></script>
+  <script src="functions.js"></script>
+  <script>
+    // Load navigation
+    fetch('nav.html')
+      .then(r => r.text())
+      .then(html => {
+        document.getElementById('navbar-container').innerHTML = html;
+        document.querySelectorAll('.nav-links a').forEach(link => {
+          if (link.getAttribute('href') === 'shop.html') link.classList.add('active');
+        });
+        initI18n();
+        if (typeof initAuth === 'function') initAuth();
+      });
+
+    let currentWatch = null;
+
+    async function loadProduct() {
+      const params = new URLSearchParams(window.location.search);
+      const watchId = params.get('id');
+      const container = document.getElementById('productContent');
+
+      if (!watchId) {
+        container.innerHTML = '<div class="product-not-found"><h2>Watch not found</h2><p>No watch ID provided.</p></div>';
+        return;
+      }
+
+      // Find watch in mock data
+      const allWatches = [...(mockNewArrivals || []), ...(mockShopWatches || [])];
+      currentWatch = allWatches.find(w => w.id === watchId);
+
+      if (!currentWatch) {
+        container.innerHTML = '<div class="product-not-found"><h2>Watch not found</h2><p>This watch may have been removed or is no longer available.</p><a href="shop.html" class="btn-primary">Browse Watches</a></div>';
+        return;
+      }
+
+      // Render the product immediately
+      renderProduct(currentWatch);
+
+      // Check auth after render (non-blocking)
+      setTimeout(async () => {
+        await checkAuth();
+        if (!window.currentUser && !sessionStorage.getItem('productPromptShown')) {
+          sessionStorage.setItem('productPromptShown', '1');
+          if (window.showAuthModal) showAuthModal('login');
+        }
+        // Update bookmark button state
+        if (window.currentUser) {
+          const bookmarks = await getBookmarks();
+          const isBookmarked = bookmarks.some(b => b.watchId === watchId);
+          const btn = document.getElementById('productBookmarkBtn');
+          if (btn && isBookmarked) {
+            btn.classList.add('bookmarked');
+            btn.innerHTML = '<i class="fas fa-heart"></i>';
+          }
+        }
+      }, 500);
+    }
+
+    function renderProduct(watch) {
+      const container = document.getElementById('productContent');
+      const brand = watch.brand || '';
+      const conditionClass = (watch.condition || '').toLowerCase().includes('new') ? 'new' : 'used';
+      const placeholderSVG = getWatchPlaceholderSVG();
+      const name = watch.name || watch.model || '';
+      const enquiryPhone = (watch.enquiry || '+852 6999 9992').replace(/[^+\d]/g, '');
+      const enquiryText = watch.enquiry || '+852 6999 9992';
+
+      // Build specs rows
+      const specsRows = [];
+      if (watch.size) specsRows.push({ label: 'Size', value: watch.size });
+      if (brand) specsRows.push({ label: 'Brand', value: brand });
+      specsRows.push({ label: 'Reference', value: watch.reference });
+      if (watch.series) specsRows.push({ label: 'Series', value: watch.series });
+      if (watch.gender) specsRows.push({ label: 'Gender', value: watch.gender });
+      if (watch.function) specsRows.push({ label: 'Function', value: watch.function });
+      if (watch.material) specsRows.push({ label: 'Material', value: watch.material });
+      if (watch.movement) specsRows.push({ label: 'Movement', value: watch.movement });
+      if (watch.year) specsRows.push({ label: 'Year', value: watch.year });
+      if (watch.priceType) specsRows.push({ label: 'Price Type', value: watch.priceType });
+
+      // Condition with box/paper
+      let conditionDetail = watch.condition || watch.conditionText || '';
+      if (watch.box || watch.paper) {
+        const extras = [];
+        if (watch.box) extras.push(`Box: ${watch.box}`);
+        if (watch.paper) extras.push(`Paper: ${watch.paper}`);
+        conditionDetail += ` (${extras.join(', ')})`;
+      }
+
+      const specsHTML = specsRows.map(r => `
+        <div class="spec-row">
+          <span class="spec-label">${r.label}</span>
+          <span class="spec-value">${r.value}</span>
+        </div>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="product-grid">
+          <div class="product-image">
+            <img src="${watch.image}" alt="${watch.alt || name}" 
+                 onerror="this.src='${placeholderSVG}'">
+            <button class="bookmark-btn-lg" id="productBookmarkBtn" onclick="handleProductBookmark('${watch.id}')" title="Bookmark">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+          <div class="product-details">
+            <div class="product-brand">${brand || 'Luxury Watch'}</div>
+            <h1 class="product-name">${name}</h1>
+            <div class="product-reference">${watch.reference}</div>
+            <div class="product-price">${watch.price || watch.priceDisplay}</div>
+            <span class="product-condition ${conditionClass}">${conditionDetail}</span>
+            
+            <div class="product-specs">
+              <h3>Specifications</h3>
+              ${specsHTML}
+            </div>
+
+            ${watch.remark ? `
+            <div class="product-specs">
+              <h3>Remark</h3>
+              <p style="color:#666; padding: 0.5rem 0;">${watch.remark}</p>
+            </div>` : ''}
+
+            ${watch.location ? `
+            <div class="product-specs">
+              <h3>Location</h3>
+              <div class="spec-row">
+                <span class="spec-label"><i class="fas fa-store"></i> Store</span>
+                <span class="spec-value">${watch.location}</span>
+              </div>
+            </div>` : ''}
+
+            <div class="product-actions">
+              <a href="https://wa.me/${enquiryPhone}?text=Hi, I'm interested in ${encodeURIComponent(name)} (${watch.reference})" class="btn-primary" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp Enquiry (${enquiryText})
+              </a>
+              <button class="btn-secondary" onclick="handleProductBookmark('${watch.id}')">
+                <i class="far fa-heart"></i> Save to Wishlist
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Update page title
+      document.title = `${name} - KenWatches`;
+
+      // Check bookmark status
+      initProductBookmark(watch.id);
+    }
+
+    async function handleProductBookmark(watchId) {
+      if (!window.currentUser) {
+        if (window.showAuthModal) showAuthModal('login');
+        return;
+      }
+      const result = await toggleBookmark(watchId);
+      if (result.error) return;
+      const btn = document.getElementById('productBookmarkBtn');
+      if (btn) {
+        if (result.bookmarked) {
+          btn.classList.add('bookmarked');
+          btn.innerHTML = '<i class="fas fa-heart"></i>';
+        } else {
+          btn.classList.remove('bookmarked');
+          btn.innerHTML = '<i class="far fa-heart"></i>';
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProduct);
+  </script>
+</body>
+</html>

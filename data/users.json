@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1775013249845",
+    "email": "carlision@test.com",
+    "phone": "+85212345678",
+    "password": "$2b$10$77gTWknM7U0zXAktAX/lge4NC4gJ2/xdT49I5pcwTxC1rTPSslKt2",
+    "name": "Carlision",
+    "createdAt": "2026-04-01T03:14:09.845Z"
+  },
+  {
+    "id": "1775013960996",
+    "email": null,
+    "phone": "+85200001111",
+    "password": "$2b$10$GoUwhl21NaDvqiWE/y34TOEaaHejeUuRIEFqqNd8SC7Sx8xqg6Cs2",
+    "name": "Final Test",
+    "createdAt": "2026-04-01T03:26:00.996Z"
+  },
+  {
+    "id": "1775033664467",
+    "email": "new@test.com",
+    "phone": null,
+    "password": "$2b$10$eY14h0JmnJ454CtnoQM91uOAcmZKAlNkmK75rlXHTX91MCBxjRb6q",
+    "name": "New User",
+    "createdAt": "2026-04-01T08:54:24.467Z"
+  },
+  {
+    "id": "1775033664571",
+    "email": null,
+    "phone": "+85298765432",
+    "password": "$2b$10$Cx3SUUu70.1tYqksPPAIC.UD6KizuGiTbvcKojMwtfW2de63i7lSe",
+    "name": "Phone User",
+    "createdAt": "2026-04-01T08:54:24.571Z"
+  },
+  {
+    "id": "1775036283631",
+    "email": "carsonor23@gmail.com",
+    "phone": null,
+    "password": "$2b$10$XTZmUok4EJDoFYcIEj62GuBLzFi1AXRbmNi0Ef1yFHJabBOtnmsJK",
+    "name": "Carson",
+    "createdAt": "2026-04-01T09:38:03.631Z"
+  },
+  {
+    "id": "1775036360697",
+    "email": null,
+    "phone": "+85200000000",
+    "password": "$2b$10$J6hOMcLg0MCCjA8Qa3mBK.qKP2ebX6f6XZWGAiuSttXO6wR8JxUCq",
+    "name": "audit",
+    "createdAt": "2026-04-01T09:39:20.697Z"
+  },
+  {
+    "id": "1775037974162",
+    "email": null,
+    "phone": "+85266588888",
+    "password": "$2b$10$2h8hbYjPbqnBrrTgJdZH1.vr977FTQwpTsc13FGEzX/AkjaIgFN/O",
+    "name": "Carson",
+    "createdAt": "2026-04-01T10:06:14.162Z"
+  }
+]
